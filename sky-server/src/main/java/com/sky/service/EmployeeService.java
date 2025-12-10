@@ -1,7 +1,10 @@
 package com.sky.service;
 
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.result.PageResult;
 
 public interface EmployeeService {
 
@@ -11,5 +14,15 @@ public interface EmployeeService {
      * @return
      */
     Employee login(EmployeeLoginDTO employeeLoginDTO);
+
+    void addEmp(EmployeeDTO employeeDTO);
+
+    PageResult list(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void setEmpStatus(Integer status, Long id);
+
+    Employee queryById(Long id);
+
+    void updateById(EmployeeDTO employeeDTO);
 
 }
