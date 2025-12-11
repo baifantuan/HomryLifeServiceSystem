@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.annotation.PublicAutoFill;
 import com.sky.enumeration.OperationType;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
@@ -16,6 +17,7 @@ public interface CategoryMapper {
      * 插入数据
      * @param category
      */
+    @PublicAutoFill(value = OperationType.INSERT)
     void insert(Category category);
 
     /**
@@ -35,6 +37,7 @@ public interface CategoryMapper {
      * 根据id修改分类
      * @param category
      */
+    @PublicAutoFill(value = OperationType.UPDATE)
     void update(Category category);
 
     /**
