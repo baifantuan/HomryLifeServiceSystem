@@ -12,3 +12,11 @@ sky:
     access-key-id: YOUR_ACCESS_KEY_ID_HERE
     access-key-secret: YOUR_ACCESS_KEY_SECRET_HERE
     bucket-name: YOUR_BUCKET_NAME_HERE
+  redis:
+    host: YOUR_REDIS_HOST_HERE
+    port: YOUR_REDIS_PORT_HERE
+    password: YOUR_REDIS_PASSWORD_HERE
+
+   wechat:
+     appid: YOUR_APPID_HERE
+     secret: YOUR_SECRET_HERE

@@ -13,13 +13,21 @@
     <update id="update">
         update dish
         <set>
-            category_id = #{categoryId}, name = #{name}, price = #{price}, image = #{image},
-            update_time = #{updateTime}, update_user = #{updateUser}
+            category_id = #{categoryId},
+            name = #{name},
+            price = #{price},
+            image = #{image},
+            update_time = #{updateTime},
+            update_user = #{updateUser}
             <if test="description != null">
                 ,description = #{description}
             </if>
         </set>
         where id = #{id}
+    </update>
+
+    <update id="setDishStatus">
+        update dish set status = #{status} where id = #{id}
     </update>
 
     <delete id="deleteByIds">
@@ -54,5 +62,24 @@
         select * from dish where id = #{id}
     </select>
 
+    <select id="list" resultType="Dish" parameterType="Dish">
+        select * from dish
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getBySetmealId" resultType="com.sky.entity.Dish">
+        select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}
+    </select>
 
 </mapper>

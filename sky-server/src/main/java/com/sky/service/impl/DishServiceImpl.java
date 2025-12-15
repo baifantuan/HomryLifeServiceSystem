@@ -139,4 +139,38 @@ public class DishServiceImpl implements DishService {
             }
         }
     }
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        DishPageQueryDTO dishPageQueryDTO = new DishPageQueryDTO();
+        BeanUtils.copyProperties(dish, dishPageQueryDTO);
+        List<DishVO> dishVOList = dishMapper.query(dishPageQueryDTO);
+        return dishVOList;
+    }
+
+    /**
+     * 根据id修改菜品状态
+     * @param status,id
+     * @return
+     */
+    public void setDishStatus(Integer status, Long id) {
+        dishMapper.setDishStatus(status, id);
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
+    }
 }

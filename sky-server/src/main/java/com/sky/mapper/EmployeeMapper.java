@@ -17,7 +17,6 @@ public interface EmployeeMapper {
      * @param username
      * @return
      */
-    @Select("select * from employee where username = #{username}")
     Employee getByUsername(String username);
 
     /**
@@ -55,9 +54,10 @@ public interface EmployeeMapper {
     /**
      * 根据主键修改员工信息
      *
-     * @param employeeDTO
+     * @param employee
      * @return
      */
-    void updateById(EmployeeDTO employeeDTO);
+    @PublicAutoFill(OperationType.UPDATE)
+    void updateById(Employee employee);
 
 }
