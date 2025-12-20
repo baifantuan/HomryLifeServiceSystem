@@ -67,8 +67,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public List<ShoppingCart> queryCart() {
         Long userId = BaseContext.getCurrentId();
         ShoppingCart shoppingCart = ShoppingCart.builder()
-                .userId(userId)
-                .build();
+                                    .userId(userId)
+                                    .build();
         return shoppingCartMapper.list(shoppingCart);
     }
 
@@ -76,8 +76,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void cleanCart() {
         Long userId = BaseContext.getCurrentId();
         ShoppingCart shoppingCart = ShoppingCart.builder()
-                .userId(userId)
-                .build();
+                                    .userId(userId)
+                                    .build();
         shoppingCartMapper.clean(shoppingCart);
+    }
+
+    @Override
+    public void subCart(ShoppingCartDTO shoppingCartDTO) {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                                    .userId(userId)
+                                    .dishId(shoppingCartDTO.getDishId())
+                                    .setmealId(shoppingCartDTO.getSetmealId())
+                                    .build();
+
+        shoppingCartMapper.deleteOneItem(shoppingCart);
     }
 }

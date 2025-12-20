@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    public static final String WX_L0GIN = "https://api.weixin.gg.com/sns/jscode2session";
+    public static final String WX_L0GIN = "https://api.weixin.qq.com/sns/jscode2session";
 
     @Autowired
     private WeChatProperties weChatProperties;
@@ -29,9 +29,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(UserLoginDTO userLoginDTO) {
         Map<String, String> claims = new HashMap<>();
-        //TODO : 等到注册小程序之后，把这里填上，包括yml
-        claims.put("appid", "");
-        claims.put("secret", weChatProperties.getAppid());
+        claims.put("appid", weChatProperties.getAppid());
+        claims.put("secret", weChatProperties.getSecret());
         claims.put("js_code", userLoginDTO.getCode());
         claims.put("grant_type", "authorization_code");
         String json = HttpClientUtil.doGet(WX_L0GIN, claims);
@@ -42,7 +41,6 @@ public class UserServiceImpl implements UserService {
         if(openid == null) {
             throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
         }
-
         User user = userMapper.getByOpenId(openid);
 
         if(user == null) {

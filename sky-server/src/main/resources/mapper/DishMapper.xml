@@ -43,11 +43,11 @@
     </select>
 
     <select id="query" resultType="com.sky.vo.DishVO">
-        select d.*, c.name categoryName from dish d left join category c
+        select d.*, c.id categoryId ,c.name categoryName from dish d left join category c
         on d.category_id = c.id
         <where>
             <if test="name != null and name != ''">
-                and d.name like concat('%', #{name}, '%')  #记得在每一行加and连接，where标签不会自动添加！
+                and d.name like concat('%', #{name}, '%')
             </if>
             <if test="categoryId != null">
                 and d.category_id = #{categoryId}
@@ -60,6 +60,18 @@
 
     <select id="queryById" resultType="com.sky.entity.Dish">
         select * from dish where id = #{id}
+    </select>
+
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from dish
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
     </select>
 
     <select id="list" resultType="Dish" parameterType="Dish">

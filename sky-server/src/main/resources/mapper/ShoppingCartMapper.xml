@@ -17,6 +17,21 @@
         delete from shopping_cart where user_id = #{userId}
     </delete>
 
+    <delete id="deleteOneItem">
+        delete from shopping_cart
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
+            </if>
+        </where>
+    </delete>
+
 
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart

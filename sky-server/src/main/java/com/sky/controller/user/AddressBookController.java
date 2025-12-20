@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user/addressBook")
-@Api(tags = "地址簿相关接口")
+@Api(tags = "C端 - 地址簿相关接口")
 @Slf4j
 public class AddressBookController {
 
@@ -46,7 +46,7 @@ public class AddressBookController {
     }
 
     @PutMapping
-    @ApiOperation("修改地址")
+    @ApiOperation("根据id修改地址")
     public Result<String> updateAddress(@RequestBody AddressBook addressBook) {
         log.info("修改id为:{}的地址数据:{}", addressBook.getId(), addressBook);
         addressBookService.updateAddress(addressBook);
@@ -55,7 +55,7 @@ public class AddressBookController {
 
 
     @DeleteMapping
-    @ApiOperation("删除地址")
+    @ApiOperation("根据id删除地址")
     public Result<String> deleteAddressById(Long id) {
         log.info("删除了id为:{}的地址", id);
         addressBookService.deleteAddressById(id);

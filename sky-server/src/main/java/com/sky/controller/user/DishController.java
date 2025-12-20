@@ -1,6 +1,8 @@
 package com.sky.controller.user;
 
 import com.sky.constant.StatusConstant;
+import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -33,7 +35,7 @@ public class DishController {
      */
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
-    public Result<List<DishVO>> list(Long categoryId) {
+    public Result<List<DishVO>> list(Integer categoryId) {
         String key = "dish_" + categoryId;
         List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
 
@@ -41,10 +43,10 @@ public class DishController {
             return Result.success(list);
         }
 
-        Dish dish = new Dish();
-        dish.setCategoryId(categoryId);
-        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
-        list = dishService.listWithFlavor(dish);
+        DishPageQueryDTO dishPageQueryDTO = new DishPageQueryDTO();
+        dishPageQueryDTO.setCategoryId(categoryId);
+        dishPageQueryDTO.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
+        list = dishService.listWithFlavor(dishPageQueryDTO);
         redisTemplate.opsForValue().set(key, list);
         return Result.success(list);
     }

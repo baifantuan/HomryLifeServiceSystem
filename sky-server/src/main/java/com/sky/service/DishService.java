@@ -21,7 +21,7 @@ public interface DishService {
 
     void updateDish(DishDTO dishDTO);
 
-    List<DishVO> listWithFlavor(Dish dish);
+    List<DishVO> listWithFlavor(DishPageQueryDTO dishPageQueryDTO);
 
     void setDishStatus(Integer status, Long id);
 

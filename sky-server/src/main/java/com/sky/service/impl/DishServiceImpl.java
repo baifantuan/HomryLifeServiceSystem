@@ -18,12 +18,14 @@ import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -35,6 +37,8 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 新增菜品
@@ -58,6 +62,7 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
+        cleanCache("dish_" + dishDTO.getCategoryId());
     }
 
     /**
@@ -95,6 +100,7 @@ public class DishServiceImpl implements DishService {
 
         dishMapper.deleteByIds(ids);
         dishFlavorMapper.deleteByDishIds(ids);
+        cleanCache("dish_*");
     }
 
     /**
@@ -138,17 +144,20 @@ public class DishServiceImpl implements DishService {
                 dishFlavorMapper.insertBatch(flavors);
             }
         }
+        cleanCache("dish_*");
     }
 
     /**
      * 条件查询菜品和口味
-     * @param dish
+     * @param dishPageQueryDTO
      * @return
      */
-    public List<DishVO> listWithFlavor(Dish dish) {
-        DishPageQueryDTO dishPageQueryDTO = new DishPageQueryDTO();
-        BeanUtils.copyProperties(dish, dishPageQueryDTO);
-        List<DishVO> dishVOList = dishMapper.query(dishPageQueryDTO);
+    public List<DishVO> listWithFlavor(DishPageQueryDTO dishPageQueryDTO) {
+        Page<DishVO> pg = dishMapper.query(dishPageQueryDTO);
+        List<DishVO> dishVOList = pg.getResult();
+        dishVOList.forEach(dishVO -> {
+            dishVO.setFlavors(dishFlavorMapper.queryByDishId(dishVO.getId()));
+        });
         return dishVOList;
     }
 
@@ -159,6 +168,7 @@ public class DishServiceImpl implements DishService {
      */
     public void setDishStatus(Integer status, Long id) {
         dishMapper.setDishStatus(status, id);
+        cleanCache("dish_*");
     }
 
     /**
@@ -172,5 +182,10 @@ public class DishServiceImpl implements DishService {
                 .status(StatusConstant.ENABLE)
                 .build();
         return dishMapper.list(dish);
+    }
+
+    private void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }

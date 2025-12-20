@@ -58,7 +58,7 @@ public class DishController {
 
 
     @GetMapping("/{id}")
-    @ApiOperation("菜品信息查询回显")
+    @ApiOperation("根据id查询菜品")
     public Result<DishDTO> queryById(@PathVariable("id") Long id) {
         log.info("查询id为:{}的菜品信息", id);
         DishDTO dishDTO = dishService.queryById(id);
