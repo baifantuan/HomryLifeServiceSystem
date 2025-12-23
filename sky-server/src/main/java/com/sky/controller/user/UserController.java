@@ -42,10 +42,15 @@ public class UserController {
         claims.put(JwtClaimsConstant.USER_ID, user.getId());
         String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(),
                 claims);
+
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .id(user.getId())
                 .openid(user.getOpenid())
                 .token(token)
+                .shopId(1)
+                .shopAddress("广东省广州市番禺区小谷围街道中山大学")
+                .shopName("宏蒙利食品店")
+                .deliveryFee(3.5)
                 .build();
 
         return Result.success(userLoginVO);

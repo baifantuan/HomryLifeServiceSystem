@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController("userShopController")
 @RequestMapping("/user/shop")
 @Slf4j
@@ -26,5 +29,15 @@ public class ShopController {
         Integer shopStatus = (Integer) redisTemplate.opsForValue().get(KEY);
         log.info("商店状态为:{}", shopStatus == 1 ? "营业中" : "已打烊");
         return Result.success(shopStatus);
+    }
+
+    @GetMapping("/getMerchantInfo")
+    @ApiOperation("查询店铺信息")
+    public Result<Map> getMerchantInfo() {
+        Map map = new HashMap();
+        map.put("phone", "18813319852");
+        map.put("address", "广东省广州市番禺区小谷围街道中山大学");
+
+        return Result.success(map);
     }
 }
